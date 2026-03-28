@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StreamLingo Subtitles</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #0d1117;
+        color: #f0f6fc;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+      button {
+        border: 1px solid #30363d;
+        background: #161b22;
+        color: #f0f6fc;
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      .subtitle-box {
+        min-height: 220px;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 20px;
+        background: rgba(22, 27, 34, 0.85);
+      }
+      .translated {
+        font-size: 36px;
+        line-height: 1.25;
+        font-weight: 700;
+        margin-bottom: 14px;
+      }
+      .source {
+        font-size: 20px;
+        line-height: 1.4;
+        color: #8b949e;
+      }
+      .meta {
+        margin-top: 10px;
+        color: #8b949e;
+        font-size: 14px;
+      }
+      .log {
+        margin-top: 12px;
+        color: #8b949e;
+        font-size: 13px;
+        white-space: pre-line;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>StreamLingo</h1>
+      <div class="controls">
+        <button id="start-btn">Start pipeline</button>
+        <button id="stop-btn">Stop pipeline</button>
+      </div>
+      <div class="subtitle-box">
+        <div id="translated" class="translated">Waiting for subtitles...</div>
+        <div id="source" class="source"></div>
+        <div id="meta" class="meta"></div>
+      </div>
+      <div id="log" class="log"></div>
+    </div>
+    <script>
+      const translatedEl = document.getElementById("translated");
+      const sourceEl = document.getElementById("source");
+      const metaEl = document.getElementById("meta");
+      const logEl = document.getElementById("log");
+
+      function appendLog(line) {
+        const current = logEl.textContent.split("\n").filter(Boolean);
+        current.push(line);
+        logEl.textContent = current.slice(-8).join("\n");
+      }
+
+      const ws = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/subtitles`);
+      ws.onopen = () => appendLog("WebSocket connected.");
+      ws.onclose = () => appendLog("WebSocket disconnected.");
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.event_type === "status") {
+          appendLog(`Status: ${data.state} (${data.message})`);
+          return;
+        }
+        translatedEl.textContent = data.translated_text || "(no translation)";
+        sourceEl.textContent = data.source_text || "";
+        metaEl.textContent = `Chunk ${data.chunk_id} | ${data.source_language} -> ${data.target_language}`;
+      };
+
+      document.getElementById("start-btn").onclick = async () => {
+        const res = await fetch("/pipeline/start", { method: "POST" });
+        const json = await res.json();
+        appendLog(`Start: ${JSON.stringify(json)}`);
+        ws.send("ping");
+      };
+
+      document.getElementById("stop-btn").onclick = async () => {
+        const res = await fetch("/pipeline/stop", { method: "POST" });
+        const json = await res.json();
+        appendLog(`Stop: ${JSON.stringify(json)}`);
+        ws.send("ping");
+      };
+    </script>
+  </body>
+</html>

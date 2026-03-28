@@ -1,0 +1,13 @@
+[project]
+name = "streamlingo"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.135.2",
+    "faster-whisper>=1.2.1",
+    "numpy>=2.4.3",
+    "openai>=2.30.0",
+    "pydantic>=2.12.5",
+    "sounddevice>=0.5.5",
+    "uvicorn[standard]>=0.42.0",
+]
