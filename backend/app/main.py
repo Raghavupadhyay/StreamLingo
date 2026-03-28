@@ -23,8 +23,8 @@ app.add_middleware(
 )
 
 runner = PipelineRunner(settings)
-ROOT = Path(__file__).resolve().parents[2]
-STATIC_DIR = ROOT / "static"
+BACKEND_ROOT = Path(__file__).resolve().parents[1]
+STATIC_DIR = BACKEND_ROOT / "static"
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
