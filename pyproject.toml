@@ -5,6 +5,7 @@ requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.135.2",
     "faster-whisper>=1.2.1",
+    "httpx>=0.28.1",
     "numpy>=2.4.3",
     "openai>=2.30.0",
     "pydantic>=2.12.5",

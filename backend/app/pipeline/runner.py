@@ -46,6 +46,8 @@ class PipelineRunner:
             WhisperConfig(
                 model_name=settings.whisper_model_name,
                 device=settings.whisper_device,
+                compute_type=settings.whisper_compute_type,
+                beam_size=settings.whisper_beam_size,
             )
         )
         self._context = ContextBuffer(max_sentences=settings.context_max_sentences)
@@ -53,6 +55,9 @@ class PipelineRunner:
             TranslatorConfig(
                 provider=settings.translation_provider,
                 openai_model=settings.openai_model,
+                ollama_model=settings.ollama_model,
+                ollama_base_url=settings.ollama_base_url,
+                ollama_timeout_seconds=settings.ollama_timeout_seconds,
             )
         )
         self._delay = DelayQueue()

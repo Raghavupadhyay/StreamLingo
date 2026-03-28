@@ -1,0 +1,24 @@
+1
+34:41:30,093 --> 34:41:32,102
+Miran
+
+2
+34:41:32,102 --> 34:41:34,124
+I am Satvik.
+
+3
+34:41:34,124 --> 34:41:36,104
+Student of Class Barbie
+
+4
+34:41:36,104 --> 34:41:38,114
+I have some involvement.
+
+5
+34:41:38,114 --> 34:41:40,124
+I am in the middle of something.
+
+6
+34:41:40,124 --> 34:41:42,104
+Parpanachatam
+

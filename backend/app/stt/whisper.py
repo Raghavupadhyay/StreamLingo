@@ -18,6 +18,7 @@ class WhisperConfig:
     model_name: str
     device: str = "auto"
     compute_type: str = "int8"
+    beam_size: int = 3
 
 
 class WhisperTranscriber:
@@ -52,7 +53,7 @@ class WhisperTranscriber:
             audio,
             language=source_language,
             vad_filter=True,
-            beam_size=5,
+            beam_size=max(1, self.cfg.beam_size),
         )
         joined = " ".join(seg.text.strip() for seg in segments if seg.text.strip())
         return TranscriptSegment(
