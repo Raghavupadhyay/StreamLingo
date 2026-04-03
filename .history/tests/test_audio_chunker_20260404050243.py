@@ -2,7 +2,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from backend.app.audio.chunker import AudioChunker, ChunkerConfig
+from app.audio.chunker import AudioChunker, ChunkerConfig
 from backend.app.models import AudioFrame
 
 # tests/test_audio_chunker.py  (updated)

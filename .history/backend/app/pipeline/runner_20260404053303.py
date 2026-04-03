@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 import json
 from backend.app.stt.silero_vad import SileroVAD
-from backend.app.stt.vad_segmenter import VADConfig, VADSegmenter
+from app.stt.vad_segmenter import VADConfig, VADSegmenter
 import time
 from dataclasses import dataclass
 from pathlib import Path

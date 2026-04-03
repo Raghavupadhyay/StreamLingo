@@ -1,9 +1,4 @@
 from __future__ import annotations
-import numpy as np
-import pytest
-
-from backend.app.audio.chunker import AudioChunker, ChunkerConfig
-from backend.app.models import AudioFrame
 
 # tests/test_audio_chunker.py  (updated)
 # Changes from original:
@@ -12,6 +7,11 @@ from backend.app.models import AudioFrame
 #   - Added assertion that legacy path always sets speaker_changed=False
 #   - Smart VAD path tested with a mock VADSegmenter
 
+import numpy as np
+import pytest
+
+from app.audio.chunker import AudioChunker, ChunkerConfig
+from app.models import AudioFrame
 
 
 def _make_cfg() -> ChunkerConfig:

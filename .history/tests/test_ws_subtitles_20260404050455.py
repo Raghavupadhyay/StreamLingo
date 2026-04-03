@@ -12,7 +12,7 @@ import json
 from fastapi.testclient import TestClient
 
 from backend.app.main import app, runner
-from backend.app.models import SubtitleEvent
+from backendapp.models import SubtitleEvent
 
 
 def test_ws_subtitles_sends_initial_status_event() -> None:

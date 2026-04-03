@@ -10,6 +10,7 @@ dependencies = [
     "openai>=2.30.0",
     "pydantic>=2.12.5",
     "sounddevice>=0.5.5",
+    "onnxruntime>=1.17.0",
     "uvicorn[standard]>=0.42.0",
 ]
 

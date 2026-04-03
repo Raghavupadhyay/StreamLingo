@@ -9,8 +9,6 @@ from __future__ import annotations
 
 import asyncio
 import json
-from backend.app.stt.silero_vad import SileroVAD
-from backend.app.stt.vad_segmenter import VADConfig, VADSegmenter
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -46,7 +44,9 @@ def _build_chunker(settings: Settings) -> AudioChunker:
         return AudioChunker(cfg)
 
     # Smart VAD path — import here so onnxruntime is optional
-    
+    from stt.silero_vad import SileroVAD
+    from stt.vad_segmenter import VADConfig, VADSegmenter
+
     vad = SileroVAD(
         model_path=settings.silero_model_path,
         threshold=settings.silero_threshold,

@@ -227,3 +227,66 @@ Replay body example:
 
 Subtitles are the fastest way to validate correctness.
 Once transcript + translation accuracy is stable, adding speech-to-speech (TTS output) is straightforward and lower risk.
+
+
+# Test file change summary for PR review
+
+## Files with changes
+
+### test_audio_chunker.py  ← REPLACE
+Reason: AudioChunk gained `speaker_changed: bool = False`.
+
+Changes:
+- All existing tests pass unchanged (legacy RMS path still works the same).
+- Added `test_legacy_path_speaker_changed_always_false` — confirms the old
+  path never sets speaker_changed.
+- Added 4 new smart VAD path tests using a mock VADSegmenter — covers
+  emit on segmenter result, speaker_changed propagation (True and False),
+  and sequence_id increment.
+
+### test_ws_subtitles.py  ← REPLACE
+Reason: SubtitleEvent gained `speaker_changed: bool = False`.
+
+Changes:
+- Existing `test_ws_subtitles_can_emit_subtitle_event` updated to assert
+  `speaker_changed` field is present in the payload and is False by default.
+- Added `test_ws_subtitles_forwards_speaker_changed_true` — confirms
+  speaker_changed=True reaches the browser payload intact.
+
+---
+
+## Files with NO changes needed
+
+### test_context_buffer.py  — NO CHANGE
+ContextBuffer and TranscriptSegment interface is unchanged.
+The new `speaker_changed` field on TranscriptSegment has a default of False,
+so all existing test constructions still work without passing it.
+
+### test_delay_queue.py  — NO CHANGE
+DelayQueue operates on TranslationResult only.
+TranslationResult is unchanged.
+
+### test_llm_translator.py  — NO CHANGE
+LLMTranslator takes TranscriptSegment and returns TranslationResult.
+Neither interface changed in a breaking way.
+The new `speaker_changed` field on TranscriptSegment defaults to False —
+existing _segment() helper constructions are unaffected.
+
+### test_replay_endpoint.py  — NO CHANGE
+Replay reads JSONL transcripts and returns TranslationResult dicts.
+The endpoint response shape is unchanged.
+speaker_changed does not appear in replay output (it's a live-capture signal).
+
+### test_system_endpoints.py  — NO CHANGE
+/health now returns `smart_vad: bool` in addition to existing fields.
+The existing assertion only checks for specific known keys — it does not
+assert the response contains *only* those keys, so the new field does not
+break anything.  No update needed.
+
+---
+
+## New file
+
+### test_smart_vad.py  ← ADD (already in PR)
+Covers SileroVAD, SpeechEnvelopeTracker, and VADSegmenter.
+All tests use mocks — zero model downloads in CI.
