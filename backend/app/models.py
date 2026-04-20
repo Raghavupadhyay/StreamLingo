@@ -21,7 +21,7 @@ class AudioChunk:
     sample_rate_hz: int
     samples: list[float]
     voiced_ratio: float
-
+    speaker_changed: bool = False
 
 @dataclass
 class TranscriptSegment:
@@ -31,6 +31,7 @@ class TranscriptSegment:
     text: str
     language: str
     confidence: float | None = None
+    speaker_changed: bool = False
 
 
 @dataclass
@@ -61,6 +62,7 @@ class SubtitleEvent(BaseModel):
     translated_text: str
     source_language: str
     target_language: str
+    speaker_changed: bool = False
 
 
 class StatusEvent(BaseModel):

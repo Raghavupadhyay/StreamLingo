@@ -7,7 +7,7 @@ It intentionally uses controlled latency (default 5-10 seconds) so translation c
 
 ## ✨ Features
 
-* Local audio capture from selected input device (mic or virtual device like BlackHole)
+* Local audio capture from selected input device (mic or virtual device)
 * Streaming chunker with adaptive VAD gating
 * `faster-whisper` STT stage (with optional mock fallback if dependency is missing)
 * Context window buffer for translation continuity
